@@ -1,6 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
+import { authService } from './app/core/services/auth.service';
+import { appConfig } from './app/app.config';
 
-bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
+authService.init().then(() => {
+  bootstrapApplication(AppComponent, appConfig);
+}).catch(err => {
+  console.error('Keycloak init error', err);
+});

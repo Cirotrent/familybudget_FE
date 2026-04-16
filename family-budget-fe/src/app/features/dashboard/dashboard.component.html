@@ -1,0 +1,14 @@
+<app-filters (filterChange)="onFilterChange($event)"></app-filters>
+
+<div *ngIf="loading">Caricamento...</div>
+
+<div class="kpi">
+  <div>Entrate: {{ kpi.income }}</div>
+  <div>Uscite: {{ kpi.expense }}</div>
+  <div>Saldo: {{ kpi.balance }}</div>
+</div>
+
+<app-income-expense-chart
+  [income]="kpi.income"
+  [expense]="kpi.expense">
+</app-income-expense-chart>

@@ -1,0 +1,21 @@
+<div class="filters">
+
+  <select [(ngModel)]="selectedFamilyId" (change)="onChange()">
+    <option *ngFor="let f of families" [value]="f.id">
+      {{ f.name }}
+    </option>
+  </select>
+
+  <select [(ngModel)]="month" (change)="onChange()">
+    <option *ngFor="let m of months" [value]="m.value">
+      {{ m.label }}
+    </option>
+  </select>
+
+  <select [(ngModel)]="year" (change)="onChange()">
+    <option *ngFor="let y of years" [value]="y">
+      {{ y }}
+    </option>
+  </select>
+
+</div>

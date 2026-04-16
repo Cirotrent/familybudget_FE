@@ -1,0 +1,22 @@
+<mat-card>
+  <mat-card-title>Crea Famiglia</mat-card-title>
+
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name">
+
+      <mat-error *ngIf="form.get('name')?.hasError('required')">
+        Campo obbligatorio
+      </mat-error>
+
+      <mat-error *ngIf="form.get('name')?.hasError('minlength')">
+        Minimo 3 caratteri
+      </mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="create()">
+      Salva
+    </button>
+  </form>
+</mat-card>
