@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { authService } from './core/services/auth.service';
 import { CommonModule } from '@angular/common';
+import { ToastContainerComponent } from './features/toast/toast-container/toast-container.component';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,8 @@ import { CommonModule } from '@angular/common';
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
-    MatButtonModule
+    MatButtonModule,
+    ToastContainerComponent
   ]
 })
 export class AppComponent {
