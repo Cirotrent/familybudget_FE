@@ -50,7 +50,8 @@ export class FiltersComponent implements OnInit {
     this.initYears();
 
     this.families = [
-      { id: 1, name: 'Famiglia Demo' }
+      { id: 1, name: 'Famiglia Demo1' },
+      { id: 2, name: 'Famiglia Demo2' }
     ];
 
     this.selectedFamilyId = this.families[0].id;

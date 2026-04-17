@@ -1,22 +1,44 @@
-import { HttpInterceptorFn } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { inject } from '@angular/core';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
+import { ToastService } from '../services/toast.service';
+import { inject } from '@angular/core';
+import { authService } from '../services/auth.service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
-  const snackBar = inject(MatSnackBar);
+  const toast = inject(ToastService);
 
   return next(req).pipe(
-    catchError((err) => {
+    catchError((error: HttpErrorResponse) => {
 
-      const message = err.error?.message || 'Errore generico';
+      console.error('❌ HTTP ERROR:', req.url, error);
 
-      snackBar.open(message, 'Chiudi', {
-        duration: 3000
-      });
+      // 401 → redirect login Keycloak
+      if (error.status === 401) {
+        toast.error('Sessione scaduta. Re-login...');
+        authService.logout()
+        // // redirect Keycloak
+        // window.location.href = 'http://localhost:8080/realms/YOUR_REALM/protocol/openid-connect/auth';
 
-      return throwError(() => err);
+        return throwError(() => error);
+      }
+
+
+      let message = 'Errore imprevisto';
+
+      if (error.status === 0) {
+        message = 'Backend non raggiungibile';
+      } else if (error.status === 401) {
+        message = 'Non autorizzato';
+      } else if (error.status === 403) {
+        message = 'Accesso negato';
+      } else if (error.status >= 500) {
+        message = 'Errore server';
+      }
+
+      toast.error(message);
+
+      return throwError(() => error);
     })
   );
 };
