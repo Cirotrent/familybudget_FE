@@ -1,0 +1,54 @@
+<mat-card class="form-card">
+
+  <h2>Nuova Transazione</h2>
+
+  <div class="form-grid">
+
+    <mat-form-field>
+      <mat-label>Importo</mat-label>
+      <input matInput type="number" [(ngModel)]="model.amount">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Tipo</mat-label>
+      <mat-select [(ngModel)]="model.type">
+        <mat-option value="INCOME">Entrata</mat-option>
+        <mat-option value="EXPENSE">Uscita</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Data</mat-label>
+      <input matInput type="date" [(ngModel)]="model.date">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Categoria</mat-label>
+      <mat-select [(ngModel)]="model.categoryId">
+        <mat-option *ngFor="let c of categories" [value]="c.id">
+          {{ c.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Famiglia</mat-label>
+      <mat-select [(ngModel)]="model.familyId">
+        <mat-option *ngFor="let f of families" [value]="f.id">
+          {{ f.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Descrizione</mat-label>
+      <input matInput [(ngModel)]="model.description">
+    </mat-form-field>
+
+  </div>
+
+  <button mat-raised-button color="primary" (click)="submit()">
+    Salva
+  </button>
+
+</mat-card>

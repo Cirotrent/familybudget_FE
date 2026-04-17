@@ -1,0 +1,10 @@
+.filters-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap; 
+}
+
+mat-form-field {
+  width: 200px;
+}

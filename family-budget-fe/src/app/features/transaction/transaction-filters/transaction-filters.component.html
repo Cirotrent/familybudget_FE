@@ -1,0 +1,24 @@
+<mat-card class="filters-card">
+  <div class="filters-row">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo</mat-label>
+      <mat-select [(ngModel)]="filter.type" (selectionChange)="emit()">
+        <mat-option value="">Tutti</mat-option>
+        <mat-option value="INCOME">Entrata</mat-option>
+        <mat-option value="EXPENSE">Uscita</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Data inizio</mat-label>
+      <input matInput type="date" [(ngModel)]="filter.startDate" (change)="emit()">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Data fine</mat-label>
+      <input matInput type="date" [(ngModel)]="filter.endDate" (change)="emit()">
+    </mat-form-field>
+
+  </div>
+</mat-card>
