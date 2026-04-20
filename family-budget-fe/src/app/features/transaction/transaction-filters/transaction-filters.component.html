@@ -10,7 +10,7 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
+    <!-- <mat-form-field appearance="outline">
       <mat-label>Data inizio</mat-label>
       <input matInput type="date" [(ngModel)]="filter.startDate" (change)="emit()">
     </mat-form-field>
@@ -18,6 +18,27 @@
     <mat-form-field appearance="outline">
       <mat-label>Data fine</mat-label>
       <input matInput type="date" [(ngModel)]="filter.endDate" (change)="emit()">
+    </mat-form-field> -->
+    <mat-form-field appearance="outline">
+      <mat-label>Data inizio</mat-label>
+      <input matInput 
+            [matDatepicker]="startPicker"
+            [(ngModel)]="filter.startDate"
+            (dateChange)="emit()">
+
+      <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+      <mat-datepicker #startPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Data fine</mat-label>
+      <input matInput 
+            [matDatepicker]="endPicker"
+            [(ngModel)]="filter.endDate"
+            (dateChange)="emit()">
+
+      <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+      <mat-datepicker #endPicker></mat-datepicker>
     </mat-form-field>
 
   </div>

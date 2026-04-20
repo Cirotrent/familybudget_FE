@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { TransactionRequest } from '../../../models/transaction-request.service';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+// import { TransactionRequest } from '../../../models/transaction-request.service';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -10,6 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { Router } from '@angular/router';
+import { CategoryService } from '../../../core/services/category.service';
 
 @Component({
   selector: 'app-transaction-form',
@@ -23,11 +24,14 @@ import { Router } from '@angular/router';
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
-    MatCardModule
+    MatCardModule,
+    ReactiveFormsModule
+
   ]
 })
 export class TransactionFormComponent implements OnInit {
 
+  form!: FormGroup;
   model: any = {
     type: 'EXPENSE'
   };
@@ -37,21 +41,69 @@ export class TransactionFormComponent implements OnInit {
 
   constructor(
     private service: TransactionService,
-    private router: Router
-  ) {}
+    private fb: FormBuilder,
+    private categoryService: CategoryService
+  ) { }
 
   ngOnInit() {
-    this.loadData();
+    // this.loadData();
+    this.form = this.fb.group({
+      amount: [],
+      type: ['EXPENSE'],
+      date: [],
+      description: [],
+      categoryId: [],
+      familyId: []
+    });
+
+    this.listenChanges();
+    this.loadFamilies();
   }
 
-  loadData() {
-    this.service.getCategories().subscribe(res => this.categories = res);
-    this.service.getFamilies().subscribe(res => this.families = res);
+  loadFamilies() {
+    this.service.getFamilies().subscribe(res => {
+      this.families = res;
+      if (this.families.length > 0) {
+        this.form.patchValue({
+          familyId: this.families[0].id,
+          type: 'EXPENSE'
+        });
+        this.loadCategories(); // 🔥 carica subito
+      }
+    }
+    );
   }
 
-  submit() {
-    this.service.create(this.model).subscribe(() => {
-      this.router.navigate(['/transactions']);
+  private listenChanges() {
+    this.form.get('familyId')?.valueChanges.subscribe(() => {
+      this.loadCategories();
+    });
+
+    this.form.get('type')?.valueChanges.subscribe(() => {
+      this.loadCategories();
     });
   }
+
+  private loadCategories() {
+    const familyId = this.form.value.familyId;
+    const type = this.form.value.type;
+
+    if (!familyId || !type) {
+      this.categories = [];
+      return;
+    }
+
+    this.categoryService
+      .getByFamilyAndType(familyId, type)
+      .subscribe(res => {
+        this.categories = res;
+      });
+  }
+
+
+  // submit() {
+  //   this.service.create(this.model).subscribe(() => {
+  //     this.router.navigate(['/transactions']);
+  //   });
+  // }
 }

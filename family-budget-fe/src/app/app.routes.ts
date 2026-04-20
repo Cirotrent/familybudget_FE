@@ -32,5 +32,11 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./features/transaction/transaction-form/transaction-form.component')
         .then(m => m.TransactionFormComponent )
-  }
+  },
+  {
+  path: 'categories',
+  loadComponent: () =>
+    import('./features/category/category-page/category-page.component')
+      .then(m => m.CategoryPageComponent)
+}
 ];

@@ -2,53 +2,59 @@
 
   <h2>Nuova Transazione</h2>
 
-  <div class="form-grid">
+  <form [formGroup]="form" style="display:flex; flex-direction:column; gap:15px; max-width:500px;">
 
-    <mat-form-field>
-      <mat-label>Importo</mat-label>
-      <input matInput type="number" [(ngModel)]="model.amount">
-    </mat-form-field>
+  <!-- FAMILY -->
+  <mat-form-field appearance="outline">
+    <mat-label>Famiglia</mat-label>
+    <mat-select formControlName="familyId">
+      <mat-option *ngFor="let f of families" [value]="f.id">
+        {{f.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Tipo</mat-label>
-      <mat-select [(ngModel)]="model.type">
-        <mat-option value="INCOME">Entrata</mat-option>
-        <mat-option value="EXPENSE">Uscita</mat-option>
-      </mat-select>
-    </mat-form-field>
+  <!-- TYPE -->
+  <mat-form-field appearance="outline">
+    <mat-label>Tipo</mat-label>
+    <mat-select formControlName="type">
+      <mat-option value="INCOME">Entrata</mat-option>
+      <mat-option value="EXPENSE">Uscita</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Data</mat-label>
-      <input matInput type="date" [(ngModel)]="model.date">
-    </mat-form-field>
+  <!-- CATEGORY (DINAMICA 🔥) -->
+  <mat-form-field appearance="outline">
+    <mat-label>Categoria</mat-label>
+    <mat-select formControlName="categoryId">
+      <mat-option *ngFor="let c of categories" [value]="c.id">
+        {{c.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Categoria</mat-label>
-      <mat-select [(ngModel)]="model.categoryId">
-        <mat-option *ngFor="let c of categories" [value]="c.id">
-          {{ c.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+  <!-- AMOUNT -->
+  <mat-form-field appearance="outline">
+    <mat-label>Importo</mat-label>
+    <input matInput type="number" formControlName="amount">
+  </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Famiglia</mat-label>
-      <mat-select [(ngModel)]="model.familyId">
-        <mat-option *ngFor="let f of families" [value]="f.id">
-          {{ f.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+  <!-- DATE -->
+  <mat-form-field appearance="outline">
+    <mat-label>Data</mat-label>
+    <input matInput type="date" formControlName="date">
+  </mat-form-field>
 
-    <mat-form-field class="full-width">
-      <mat-label>Descrizione</mat-label>
-      <input matInput [(ngModel)]="model.description">
-    </mat-form-field>
+  <!-- DESCRIPTION -->
+  <mat-form-field appearance="outline">
+    <mat-label>Descrizione</mat-label>
+    <input matInput formControlName="description">
+  </mat-form-field>
 
-  </div>
-
-  <button mat-raised-button color="primary" (click)="submit()">
+  <button mat-raised-button color="primary">
     Salva
   </button>
+
+</form>
 
 </mat-card>

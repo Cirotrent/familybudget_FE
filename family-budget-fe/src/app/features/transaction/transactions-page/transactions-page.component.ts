@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TransactionFiltersComponent } from '../transaction-filters/transaction-filters.component';
 import { TransactionListComponent } from '../transaction-list/transaction-list.component';
@@ -32,12 +32,22 @@ import { Router } from '@angular/router';
   //   </app-transaction-list>
   // `
 })
-export class TransactionsPageComponent {
+export class TransactionsPageComponent implements OnInit {
 
   transactions: any[] = [];
   currentFilter: any = {};
 
  constructor(private service: TransactionService,private router: Router) {}
+
+ formatDate(date: Date | null): string | null {
+  if (!date) return null;
+
+  return date.toISOString().split('T')[0];
+}
+  ngOnInit(): void {
+   this.currentFilter = { type: "", startDate:"", endDate:""};
+    this.load();
+  }
 
   onFilterChange(filter: any) {
     this.currentFilter = filter;
@@ -58,6 +68,6 @@ export class TransactionsPageComponent {
   }
 
   goToCreate() {
-  this.router.navigate(['/transactions/new']);
-}
+    this.router.navigate(['/transactions/new']);
+  }
 }

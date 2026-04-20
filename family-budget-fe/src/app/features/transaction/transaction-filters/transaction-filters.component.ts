@@ -9,9 +9,14 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatCardModule } from '@angular/material/card';
 
 export interface TransactionFilter {
-  type?: string;
   startDate?: Date;
   endDate?: Date;
+  type?: string;
+}
+export interface DashboardFilterRequest {
+  startDate?: string;
+  endDate?: string;
+  type?: string;
 }
 
 @Component({
@@ -32,11 +37,25 @@ export interface TransactionFilter {
 })
 export class TransactionFiltersComponent {
 
- @Output() filterChange = new EventEmitter<TransactionFilter>();
+ @Output() filterChange = new EventEmitter<DashboardFilterRequest>();
 
   filter: TransactionFilter = {};
 
-  emit() {
-    this.filterChange.emit(this.filter);
-  }
+  // emit() {
+  //   this.filterChange.emit(this.filter);
+  // }
+
+ emit() {
+  const request: DashboardFilterRequest = {
+    type: this.filter.type,
+    startDate: this.formatDate(this.filter.startDate),
+    endDate: this.formatDate(this.filter.endDate)
+  };
+
+  this.filterChange.emit(request);
+}
+formatDate(date?: Date): string | undefined {
+  if (!date) return undefined;
+  return date.toISOString().split('T')[0];
+}
 }
