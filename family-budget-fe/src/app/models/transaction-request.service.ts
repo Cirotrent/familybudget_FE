@@ -4,6 +4,7 @@ export interface TransactionRequest {
   type: 'INCOME' | 'EXPENSE';
   date: string;
   familyId: number;
+  categoryId: number;
 }
 
 export interface TransactionResponse {
@@ -12,4 +13,12 @@ export interface TransactionResponse {
   description: string;
   type: 'INCOME' | 'EXPENSE';
   date: string;
+}
+
+export interface DashboardFilterRequest {
+  startDate?: string;
+  endDate?: string;
+  type?: string;
+  categoryId?: number;
+  familyId?: number;
 }

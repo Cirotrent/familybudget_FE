@@ -24,7 +24,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
 
-      let message = 'Errore imprevisto';
+      let message = 'Errore imprevisto: ' + error.error.message;
 
       if (error.status === 0) {
         message = 'Backend non raggiungibile';
@@ -35,7 +35,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       } else if (error.status >= 500) {
         message = 'Errore server';
       }
-
       toast.error(message);
 
       return throwError(() => error);

@@ -23,6 +23,15 @@ import { CategoryService } from '../../../core/services/category.service';
     <div mat-dialog-content style="display:flex; flex-direction:column; gap:15px; margin-top:10px;">
 
       <mat-form-field appearance="outline">
+        <mat-label>Famiglia</mat-label>
+        <mat-select [(ngModel)]="model.familyId">
+          <mat-option *ngFor="let f of families" [value]="f.id">
+            {{f.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
         <mat-label>Nome</mat-label>
         <input matInput [(ngModel)]="model.name">
       </mat-form-field>
@@ -46,19 +55,21 @@ import { CategoryService } from '../../../core/services/category.service';
 export class CategoryDialogComponent {
 
   model: any = {};
+  families: any[] = [];
 
   constructor(
     private service: CategoryService,
     private dialogRef: MatDialogRef<CategoryDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+     this.families = data.families;
     if (data.category) {
       this.model = { ...data.category };
     } else {
       this.model = {
         name: '',
         type: 'EXPENSE',
-        familyId: data.familyId
+        familyId: data.selectedFamilyId
       };
     }
   }

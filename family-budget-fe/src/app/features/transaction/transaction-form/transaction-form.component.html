@@ -2,7 +2,7 @@
 
   <h2>Nuova Transazione</h2>
 
-  <form [formGroup]="form" style="display:flex; flex-direction:column; gap:15px; max-width:500px;">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" style="display:flex; flex-direction:column; gap:15px; max-width:500px;">
 
   <!-- FAMILY -->
   <mat-form-field appearance="outline">
@@ -42,7 +42,14 @@
   <!-- DATE -->
   <mat-form-field appearance="outline">
     <mat-label>Data</mat-label>
-    <input matInput type="date" formControlName="date">
+
+      <input 
+        matInput 
+        [matDatepicker]="picker"
+        formControlName="date">
+
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
   <!-- DESCRIPTION -->

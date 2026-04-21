@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { TransactionRequest, TransactionResponse } from '../../models/transaction-request.service';
+import { DashboardFilterRequest, TransactionRequest, TransactionResponse } from '../../models/transaction-request.service';
 
 @Injectable({ providedIn: 'root' })
 export class TransactionService {
@@ -15,17 +15,15 @@ export class TransactionService {
     return this.http.post<TransactionResponse>(this.baseUrl, dto);
   }
 
-  getAll(filters?: {
-    type?: string;
-    startDate?: string;
-    endDate?: string;
-  }): Observable<TransactionResponse[]> {
+  getAll(filters?: DashboardFilterRequest): Observable<TransactionResponse[]> {
 
     let params = new HttpParams();
 
     if (filters?.type) params = params.set('type', filters.type);
     if (filters?.startDate) params = params.set('startDate', filters.startDate);
     if (filters?.endDate) params = params.set('endDate', filters.endDate);
+    if (filters?.categoryId) params = params.set('categoryId', filters.categoryId);
+    if (filters?.familyId) params = params.set('familyId', filters.familyId);
 
     return this.http.get<TransactionResponse[]>(this.baseUrl, { params });
   }

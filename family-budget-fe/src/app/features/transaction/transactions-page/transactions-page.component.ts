@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TransactionFiltersComponent } from '../transaction-filters/transaction-filters.component';
 import { TransactionListComponent } from '../transaction-list/transaction-list.component';
 // import { TransactionFormComponent } from '../transaction-form/transaction-form.component';
-import { TransactionRequest, TransactionResponse } from '../../../models/transaction-request.service';
+import { DashboardFilterRequest, TransactionRequest, TransactionResponse } from '../../../models/transaction-request.service';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
@@ -49,7 +49,7 @@ export class TransactionsPageComponent implements OnInit {
     this.load();
   }
 
-  onFilterChange(filter: any) {
+  onFilterChange(filter: DashboardFilterRequest) {
     this.currentFilter = filter;
     this.load();
   }

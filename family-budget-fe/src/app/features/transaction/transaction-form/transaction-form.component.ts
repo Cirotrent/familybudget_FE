@@ -11,6 +11,11 @@ import { MatCardModule } from '@angular/material/card';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { Router } from '@angular/router';
 import { CategoryService } from '../../../core/services/category.service';
+import { FamilyService } from '../../../core/services/family.service';
+import { TransactionRequest } from '../../../models/transaction-request.service';
+import { ToastService } from '../../../core/services/toast.service';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-transaction-form',
@@ -25,12 +30,16 @@ import { CategoryService } from '../../../core/services/category.service';
     MatButtonModule,
     MatSelectModule,
     MatCardModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatNativeDateModule
 
   ]
 })
 export class TransactionFormComponent implements OnInit {
 
+  
   form!: FormGroup;
   model: any = {
     type: 'EXPENSE'
@@ -40,20 +49,23 @@ export class TransactionFormComponent implements OnInit {
   families: any[] = [];
 
   constructor(
-    private service: TransactionService,
+    private familyService: FamilyService,
+    private transactionService: TransactionService,
     private fb: FormBuilder,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private router: Router,
+    private toast: ToastService
   ) { }
 
   ngOnInit() {
     // this.loadData();
     this.form = this.fb.group({
-      amount: [],
+      amount: [0],
       type: ['EXPENSE'],
-      date: [],
-      description: [],
-      categoryId: [],
-      familyId: []
+      date: [new Date()],
+      description: [""],
+      categoryId: [0],
+      familyId: [0]
     });
 
     this.listenChanges();
@@ -61,7 +73,7 @@ export class TransactionFormComponent implements OnInit {
   }
 
   loadFamilies() {
-    this.service.getFamilies().subscribe(res => {
+    this.familyService.getFamilies().subscribe(res => {
       this.families = res;
       if (this.families.length > 0) {
         this.form.patchValue({
@@ -101,9 +113,39 @@ export class TransactionFormComponent implements OnInit {
   }
 
 
-  // submit() {
-  //   this.service.create(this.model).subscribe(() => {
+  // onSubmit() {
+  //   this.transactionService.create(this.form.value).subscribe(() => {
   //     this.router.navigate(['/transactions']);
   //   });
   // }
+
+  onSubmit() {
+  if (this.form.invalid) {
+    this.toast.error('Compila tutti i campi');
+    return;
+  }
+
+  const formValue = this.form.value;
+
+  const payload: TransactionRequest = {
+    amount: formValue.amount!,
+    description: formValue.description!,
+    type: formValue.type!,
+    categoryId: formValue.categoryId!,
+    familyId: formValue.familyId!,
+    date: this.formatDate(formValue.date!)
+  };
+
+  this.transactionService.create(payload).subscribe({
+    next: () => {
+      this.toast.success('Transazione salvata');
+      this.router.navigate(['/transactions']);
+    },
+    error: () => this.toast.error('Errore salvataggio')
+  });
+}
+
+private formatDate(date: Date): string {
+  return date.toISOString().split('T')[0];
+}
 }
