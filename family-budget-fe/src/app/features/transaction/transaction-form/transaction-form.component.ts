@@ -16,6 +16,7 @@ import { TransactionRequest } from '../../../models/transaction-request.service'
 import { ToastService } from '../../../core/services/toast.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-transaction-form',
@@ -58,7 +59,6 @@ export class TransactionFormComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.loadData();
     this.form = this.fb.group({
       amount: [0],
       type: ['EXPENSE'],
@@ -80,44 +80,31 @@ export class TransactionFormComponent implements OnInit {
           familyId: this.families[0].id,
           type: 'EXPENSE'
         });
-        this.loadCategories(); // 🔥 carica subito
+        this.loadCategories(this.families[0].id, 'EXPENSE'); 
       }
     }
     );
   }
 
   private listenChanges() {
-    this.form.get('familyId')?.valueChanges.subscribe(() => {
-      this.loadCategories();
-    });
-
-    this.form.get('type')?.valueChanges.subscribe(() => {
-      this.loadCategories();
-    });
+    const family$ = this.form.get('familyId')!.valueChanges;
+    const type$ = this.form.get('type')!.valueChanges;
+     combineLatest([family$, type$]).subscribe(([familyId, type]) => {
+        this.loadCategories(familyId, type);
+      });
   }
 
-  private loadCategories() {
-    const familyId = this.form.value.familyId;
-    const type = this.form.value.type;
-
+  private loadCategories(familyId: any, type: any) {
     if (!familyId || !type) {
       this.categories = [];
       return;
     }
-
     this.categoryService
       .getByFamilyAndType(familyId, type)
       .subscribe(res => {
         this.categories = res;
       });
   }
-
-
-  // onSubmit() {
-  //   this.transactionService.create(this.form.value).subscribe(() => {
-  //     this.router.navigate(['/transactions']);
-  //   });
-  // }
 
   onSubmit() {
   if (this.form.invalid) {
