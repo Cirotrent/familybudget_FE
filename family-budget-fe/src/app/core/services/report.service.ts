@@ -6,7 +6,7 @@ import { MonthlyReport } from '../../models/monthly-report';
 export class ReportService {
 
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:9090/api/reports';
+  private baseUrl = 'https://familybudget-be.onrender.com/api/reports';
 
    getMonthlyReport(filter: any) {
     const params = new HttpParams()

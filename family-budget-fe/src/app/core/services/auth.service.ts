@@ -6,7 +6,7 @@ class AuthService {
 
   init(): Promise<boolean> {
     this.keycloak = new Keycloak({
-      url: 'http://localhost:8080',
+      url: 'https://keycloak-server-4bwx.onrender.com',
       realm: 'family-budget',
       clientId: 'family-budget-frontend'
     });

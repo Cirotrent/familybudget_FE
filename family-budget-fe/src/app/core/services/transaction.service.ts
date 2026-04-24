@@ -6,8 +6,8 @@ import { DashboardFilterRequest, TransactionRequest, TransactionResponse } from 
 @Injectable({ providedIn: 'root' })
 export class TransactionService {
 
-  private baseUrl = 'http://localhost:9090/api/transactions';
-  private baseUrlFamily = 'http://localhost:9090/api/families';
+  private baseUrl = 'https://familybudget-be.onrender.com/api/transactions';
+  private baseUrlFamily = 'https://familybudget-be.onrender.com/api/families';
 
   constructor(private http: HttpClient) {}
 

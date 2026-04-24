@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 export class FamilyService {
 
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:9090/api/families';
+  private baseUrl = 'https://familybudget-be.onrender.com/api/families';
 
   createFamily(name: string) {
     return this.http.post(`${this.baseUrl}/families`, { name });
