@@ -1,5 +1,5 @@
 {
-  "outputDirectory": "family-budget-fe/dist/family-budget-fe",
+  "outputDirectory": "dist/family-budget-fe",
   "rewrites": [
     {
       "source": "/(.*)",
