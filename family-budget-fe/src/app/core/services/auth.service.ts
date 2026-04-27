@@ -1,4 +1,5 @@
 import Keycloak from 'keycloak-js';
+import { environment } from '../../../env/environment';
 
 class AuthService {
 
@@ -6,7 +7,7 @@ class AuthService {
 
   init(): Promise<boolean> {
     this.keycloak = new Keycloak({
-      url: 'https://keycloak-server-4bwx.onrender.com',
+      url: environment.keycloakUrl,
       realm: 'family-budget',
       clientId: 'family-budget-frontend'
     });

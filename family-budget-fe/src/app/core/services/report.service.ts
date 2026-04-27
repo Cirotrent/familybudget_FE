@@ -1,12 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { MonthlyReport } from '../../models/monthly-report';
+import { environment } from '../../../env/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ReportService {
 
   private http = inject(HttpClient);
-  private baseUrl = 'https://familybudget-be.onrender.com/api/reports';
+  private baseUrl = environment.apiUrl + '/reports';
 
    getMonthlyReport(filter: any) {
     const params = new HttpParams()
