@@ -1,22 +1,37 @@
-<mat-card>
-  <mat-card-title>Crea Famiglia</mat-card-title>
+<h2>Le mie famiglie</h2>
 
-  <form [formGroup]="form">
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Nome</mat-label>
-      <input matInput formControlName="name">
+<mat-card *ngFor="let f of families" class="family-card">
+  <mat-card-title>{{ f.name }}</mat-card-title>
 
-      <mat-error *ngIf="form.get('name')?.hasError('required')">
-        Campo obbligatorio
-      </mat-error>
-
-      <mat-error *ngIf="form.get('name')?.hasError('minlength')">
-        Minimo 3 caratteri
-      </mat-error>
+  <mat-card-content>
+    <mat-form-field appearance="outline">
+      <mat-label>Username</mat-label>
+      <input matInput #username>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" (click)="create()">
-      Salva
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="addMember(f.id, username.value)">
+      Aggiungi membro
     </button>
-  </form>
+  </mat-card-content>
 </mat-card>
+
+<mat-divider></mat-divider>
+
+<h3>Crea nuova famiglia</h3>
+
+<div class="create-family">
+  <mat-form-field appearance="outline">
+    <mat-label>Nome famiglia</mat-label>
+    <input matInput [(ngModel)]="newFamilyName">
+  </mat-form-field>
+
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="createFamily()">
+    Crea
+  </button>
+</div>

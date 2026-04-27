@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Family, FamilyService } from '../../../core/services/family.service';
 
 export interface DashboardFilter {
   familyId: number;
@@ -16,9 +17,10 @@ export interface DashboardFilter {
 })
 export class FiltersComponent implements OnInit {
 
+  private familyService = inject(FamilyService);
   @Output() filterChange = new EventEmitter<DashboardFilter>();
 
-  families: { id: number; name: string }[] = [];
+  families: Family[] = [];
 
   months = [
     { value: 1, label: 'Gennaio' },
@@ -49,14 +51,13 @@ export class FiltersComponent implements OnInit {
 
     this.initYears();
 
-    this.families = [
-      { id: 1, name: 'Famiglia Demo1' },
-      { id: 2, name: 'Famiglia Demo2' }
-    ];
-
-    this.selectedFamilyId = this.families[0].id;
-
-    this.emitChange();
+    this.familyService.getFamilies().subscribe({
+      next: data => {
+        this.families = data;
+        this.selectedFamilyId = this.families[0].id;
+        this.emitChange();
+      }
+    });
   }
 
   initYears() {

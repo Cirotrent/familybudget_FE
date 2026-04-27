@@ -1,12 +1,14 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FamilyService } from '../../core/services/family.service';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Family, FamilyService } from '../../core/services/family.service';
 import { CommonModule } from '@angular/common';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   standalone: true,
@@ -14,27 +16,50 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './families.component.html',
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    MatCardModule,
+    FormsModule,
+    MatListModule,
+    MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatDividerModule,
+    MatCardModule
   ]
 })
 
-export class FamiliesComponent {
+export class FamiliesComponent implements OnInit {
 
-  private fb = inject(FormBuilder);
-  private service = inject(FamilyService);
+  private familyService = inject(FamilyService);
 
-  form = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(3)]]
-  });
+  families: Family[] = [];
+  newFamilyName = '';
 
-  create() {
-    if (this.form.invalid) return;
+  ngOnInit(): void {
+    this.loadFamilies();
+  }
 
-    this.service.createFamily(this.form.value.name!)
-      .subscribe();
+  loadFamilies() {
+    this.familyService.getFamilies().subscribe({
+      next: data => this.families = data
+    });
+  }
+
+  createFamily() {
+    if (!this.newFamilyName) return;
+
+    this.familyService.createFamily(this.newFamilyName).subscribe({
+      next: () => {
+        this.newFamilyName = '';
+        this.loadFamilies();
+      }
+    });
+  }
+
+  addMember(familyId: number, username: string) {
+    if (!username) return;
+
+    this.familyService.addMember(familyId, username).subscribe({
+      next: () => alert('Membro aggiunto'),
+      error: err => alert(err.error)
+    });
   }
 }

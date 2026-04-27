@@ -3,6 +3,7 @@ import { DashboardFilter, FiltersComponent } from './filters/filters.component';
 import { ReportService } from '../../core/services/report.service';
 import { CommonModule } from '@angular/common';
 import { IncomeExpenseChartComponent } from './income-expense-chart/income-expense-chart.component';
+import { Family, FamilyService } from '../../core/services/family.service';
 
 @Component({
   standalone: true,
@@ -20,16 +21,31 @@ export class DashboardComponent implements OnInit {
 
   loading = false;
 
-  constructor(private dashboardService: ReportService) {}
+  constructor(private dashboardService: ReportService,
+    private familyService: FamilyService
+  ) {}
+
+  families: Family[] = [];
 
   ngOnInit(): void {
     const now = new Date();
 
-    this.loadData({
-      familyId: 1,
-      month: now.getMonth() + 1,
-      year: now.getFullYear()
-    });
+    this.familyService.getFamilies().subscribe({
+      next: data => {
+        console.log(data);
+        this.families = data;
+        console.log("family id: " +this.families[0].id);
+        this.loadData({
+          familyId: this.families[0].id,
+          month: now.getMonth() + 1,
+          year: now.getFullYear()
+        });
+      }
+    })
+
+    
+
+     
   }
 
   onFilterChange(filter: DashboardFilter) {
