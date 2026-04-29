@@ -18,6 +18,10 @@ class AuthService {
     });
   }
 
+  updateToken(param: number): Promise<boolean> {
+    return this.keycloak.updateToken(param)
+  }
+
   getToken(): string {
     return this.keycloak.token!;
   }

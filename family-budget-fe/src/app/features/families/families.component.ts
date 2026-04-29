@@ -50,6 +50,7 @@ export class FamiliesComponent implements OnInit {
       next: () => {
         this.newFamilyName = '';
         this.loadFamilies();
+        alert('Famiglia creata')
       }
     });
   }
