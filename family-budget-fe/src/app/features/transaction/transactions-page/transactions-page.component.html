@@ -16,5 +16,8 @@
 
 <app-transaction-list
   [transactions]="transactions"
-  (delete)="onDelete($event)">
+  [totalElements]="totalElements"
+  [pageIndex]="page"
+  (delete)="onDelete($event)"
+  (pageChange)="onPageChange($event)">
 </app-transaction-list>

@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TransactionFiltersComponent } from '../transaction-filters/transaction-filters.component';
 import { TransactionListComponent } from '../transaction-list/transaction-list.component';
-// import { TransactionFormComponent } from '../transaction-form/transaction-form.component';
 import { DashboardFilterRequest, TransactionRequest, TransactionResponse } from '../../../models/transaction-request.service';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-transactions-page',
@@ -15,27 +15,19 @@ import { Router } from '@angular/router';
     CommonModule,
     TransactionFiltersComponent,
     TransactionListComponent,
-    // TransactionFormComponent,
     MatIcon
   ],
   templateUrl: './transactions-page.component.html',
-  // template: `
-  //   <h2>Transazioni</h2>
-
-  //   <app-transaction-form (create)="onCreate($event)"></app-transaction-form>
-
-  //   <app-transaction-filters (filtersChange)="onFilter($event)"></app-transaction-filters>
-
-  //   <app-transaction-list
-  //     [transactions]="transactions"
-  //     (delete)="onDelete($event)">
-  //   </app-transaction-list>
-  // `
+  
 })
 export class TransactionsPageComponent implements OnInit {
 
-  transactions: any[] = [];
   currentFilter: any = {};
+  transactions: TransactionResponse[] = [];
+
+  totalElements = 0;
+  page = 0;
+  size = 10;
 
  constructor(private service: TransactionService,private router: Router) {}
 
@@ -55,12 +47,21 @@ export class TransactionsPageComponent implements OnInit {
   }
 
   load() {
-    this.service.getAll(this.currentFilter)
-      .subscribe(res => this.transactions = res);
+    this.service.getAll(this.currentFilter, this.page, this.size)
+    .subscribe(res => {
+      this.transactions = res.content;
+      this.totalElements = res.totalElements;
+    });
   }
 
   onDelete(id: number) {
     this.service.delete(id).subscribe(() => this.load());
+  }
+
+  onPageChange(event: PageEvent) {
+    this.page = event.pageIndex;
+    this.size = event.pageSize;
+    this.load();
   }
 
   onSave(dto: any) {

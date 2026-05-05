@@ -6,6 +6,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-transaction-list',
@@ -16,16 +17,24 @@ import { MatCardModule } from '@angular/material/card';
     MatTableModule,
     MatIconModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatPaginatorModule
   ]
 })
 export class TransactionListComponent {
   @Input() transactions: any[] = [];
+  @Input() totalElements: number = 0;
+  @Input() pageIndex: number = 0;
   @Output() delete = new EventEmitter<number>();
+  @Output() pageChange = new EventEmitter<PageEvent>();
 
    displayedColumns = ['date', 'description', 'type', 'amount', 'actions'];
 
   onDelete(id: number) {
     this.delete.emit(id);
+  }
+  
+  onPageChange(event: PageEvent) {
+    this.pageChange.emit(event);
   }
 }

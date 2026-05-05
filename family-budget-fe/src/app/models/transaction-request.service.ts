@@ -15,6 +15,14 @@ export interface TransactionResponse {
   date: string;
 }
 
+export interface PageResponse<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+}
+
 export interface DashboardFilterRequest {
   startDate?: string;
   endDate?: string;
